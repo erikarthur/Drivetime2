@@ -30,7 +30,7 @@ function initializeObjects()
     dtObject.routeOpacity = $.cookie("routeOpacity");
 
     if (typeof (dtObject.routeOpacity) != null) {
-        $("#routeOpacity").slider("value", dtObject.routeOpacity);
+        $("#routeOpacity").slider("value", 55);
     }
     else
         $("#routeOpacity").slider("value", 55);
