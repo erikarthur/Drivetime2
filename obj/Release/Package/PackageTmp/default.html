@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DriveTime</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="description" content="" />
+	<meta name="author" content="">
+	<meta name="keywords" content="" />
+
+	<!-- Optimized mobile viewport -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<!-- Place favicon.ico and apple-touch-icon.png in root directory -->
+		
+	  <link href="css/style.css" rel="stylesheet" />
+
+      <script type="text/javascript" src="js/trafficFunctions.js"></script>
+    <script type="text/javascript" src="js/ParseOutput.js"></script>
+      <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+
+    
+    <style type="text/css">
+    </style>
+</head>
+<body onload="createMap();">
+    <div><h1>Drivetime</h1></div>
+
+    <div id="driveTime">Travel Time is</div>
+
+    
+       <div id="myMap" class="div1" style="position:relative;display:inline-block; border:solid; width:600px; height:400px"></div>
+   
+         <div class="div2">
+            <input id="Button3" type="button" value="Show To Work" onclick="createDrivingRoute(0);"/>
+            <input id="Button4" type="button" value="Show To Home" onclick="createDrivingRoute(1);"/>
+            <input id="Button5" type="button" value="ParseOutput" onclick="parseOutput();"/>
+        </div>    
+    
+    <div id="output" class="div1" style="visibility:visible;overflow:scroll;height:10px"></div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+	<!-- HTML5 IE Enabling Script -->
+	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	
+	<!-- CSS3 Media Queries -->
+	<script src="js/respond.min.js"></script>
+      <script type="text/javascript">
+
+          var map = null;
+          var directionsManager;
+          var directionsErrorEventObj;
+          var directionsUpdatedEventObj;
+
+          function createMap() {
+              // Initialize the map
+              map = new Microsoft.Maps.Map(document.getElementById("myMap"),
+                           { credentials: "AmLVAXMn2L1eVoiJ-v4jC9Sxyoh1A-DAViCGgQZT7xsGjZGJJMEo2p1sEIy2G_95" });
+
+              var latVal = 44.93829887705892;
+              var longVal = -93.0003124149414;
+
+
+              // Set the map center
+              map.setView({ center: new Microsoft.Maps.Location(latVal, longVal) });
+
+              var options = map.getOptions();
+              options.zoom = 12;
+              map.setView(options);
+
+              Microsoft.Maps.loadModule('Microsoft.Maps.Traffic', {
+                  callback: function () {
+                      trafficLayer = new Microsoft.Maps.Traffic.TrafficLayer(map);
+                      var tileLayer = trafficLayer.getTileLayer();
+                      tileLayer.setOptions({ opacity: 1.0 });
+
+                      // show the traffic Layer 
+                      trafficLayer.show();
+                  }
+              });
+
+              if (!directionsManager) {
+                  Microsoft.Maps.loadModule('Microsoft.Maps.Directions', { callback: createDrivingRoute });
+              }
+              else {
+                  createDrivingRoute(0);
+              }
+          }
+
+
+
+
+          function home() {
+              var query = document.getElementById("LocA").value;
+
+
+              map.getCredentials(function (credentials) {
+                  var searchRequest = 'http://dev.virtualearth.net/REST/v1/Locations/' + query + '?output=json&jsonp=SearchServiceCallback&key=AmLVAXMn2L1eVoiJ-v4jC9Sxyoh1A-DAViCGgQZT7xsGjZGJJMEo2p1sEIy2G_95';
+                  var mapscript = document.createElement('script');
+                  mapscript.type = 'text/javascript';
+                  mapscript.src = searchRequest;
+                  document.getElementById('myMap').appendChild(mapscript);
+              });
+              var latlon = map.getCenter();
+              document.getElementById('Latitude').value = latlon.latitude;  // + '/' + latlon.longitude
+              document.getElementById('Longitude').value = latlon.longitude;
+              document.getElementById('LatLong').value = latlon.latitude + ',' + latlon.longitude
+          }
+
+          function mapData() {
+
+              var latlon = map.getCenter();
+              document.getElementById('Latitude').value = latlon.latitude;  // + '/' + latlon.longitude
+              document.getElementById('Longitude').value = latlon.longitude;
+              var options = map.getOptions();
+              document.getElementById('LatLong').value = options.zoom;
+          }
+
+          function SearchServiceCallback(result) {
+              var output = document.getElementById("output");
+              if (output) {
+                  while (output.hasChildNodes()) {
+                      output.removeChild(output.lastChild);
+                  }
+              }
+
+              var resultsHeader = document.createElement("h5");
+
+              output.appendChild(resultsHeader);
+
+              if (result && result.resourceSets && result.resourceSets.length > 0 && result.resourceSets[0].resources &&
+              result.resourceSets[0].resources.length > 0) {
+                  resultsHeader.innerHTML = "Bing Maps REST Search API  <br/>  Found location " + result.resourceSets[0].resources[0].name;
+
+                  var bbox = result.resourceSets[0].resources[0].bbox;
+
+                  var viewBoundaries = Microsoft.Maps.LocationRect.fromLocations(new Microsoft.Maps.Location(bbox[0], bbox[1]), new Microsoft.Maps.Location(bbox[2], bbox[3]));
+
+                  map.setView({ bounds: viewBoundaries });
+
+                  var location = new Microsoft.Maps.Location(result.resourceSets[0].resources[0].point.coordinates[0], result.resourceSets[0].resources[0].point.coordinates[1]);
+                  var pushpin = new Microsoft.Maps.Pushpin(location, { text: "erik" });
+
+                  map.entities.push(pushpin);
+
+
+              }
+              else {
+                  if (typeof (response) == 'undefined' || response == null) {
+                      alert("Invalid credentials or no response");
+                  }
+                  else {
+                      if (typeof (response) != 'undefined' && response && result && result.errorDetails) {
+                          resultsHeader.innerHTML = "Message :" + response.errorDetails[0];
+                      }
+
+                      alert("No results for the query");
+                  }
+              }
+          }
+
+          function setCookie(c_name, value, exdays) {
+              var exdate = new Date();
+              exdate.setDate(exdate.getDate() + exdays);
+              var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+              document.cookie = c_name + "=" + c_value;
+          }
+
+          function getCookie(c_name) {
+              var i, x, y, ARRcookies = document.cookie.split(";");
+              for (i = 0; i < ARRcookies.length; i++) {
+                  x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+                  y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+                  x = x.replace(/^\s+|\s+$/g, "");
+                  if (x == c_name) {
+                      return unescape(y);
+                  }
+              }
+          }
+      </script>
+
+		
+</body>
+</html>
