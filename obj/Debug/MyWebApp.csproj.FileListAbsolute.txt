@@ -1,5 +1,0 @@
-C:\Users\erikar\documents\visual studio 2012\Projects\MyWebApp\MyWebApp\bin\MyWebApp.dll
-C:\Users\erikar\documents\visual studio 2012\Projects\MyWebApp\MyWebApp\bin\MyWebApp.pdb
-C:\Users\erikar\documents\visual studio 2012\Projects\MyWebApp\MyWebApp\obj\Debug\MyWebApp.csprojResolveAssemblyReference.cache
-C:\Users\erikar\documents\visual studio 2012\Projects\MyWebApp\MyWebApp\obj\Debug\MyWebApp.dll
-C:\Users\erikar\documents\visual studio 2012\Projects\MyWebApp\MyWebApp\obj\Debug\MyWebApp.pdb

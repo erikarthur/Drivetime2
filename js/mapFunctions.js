@@ -9,6 +9,13 @@ dtObject.wayPoint2 = null;
 dtObject.Duration = null;
 dtObject.routeColor = null;
 dtObject.routeOpacity = null;
+dtObject.r = null;
+dtObject.g = null;
+dtObject.b = null;
+dtObject.a = null;
+
+function d2h(d) {return d.toString(16);}
+function h2d(h) {return parseInt(h,16);}
 
 function initializeObjects()
 {
@@ -28,42 +35,48 @@ function initializeObjects()
     dtObject.wayPoint2 = $.cookie("wayPoint2");
     dtObject.routeColor = $.cookie("routeColor");
     dtObject.routeOpacity = $.cookie("routeOpacity");
+    dtObject.r = dtObject.routeColor.substr(1,2);
+    dtObject.g = dtObject.routeColor.substr(3,2);
+    dtObject.b = dtObject.routeColor.substr(5,2);
+
+    dtObject.r = h2d(dtObject.r);
+    dtObject.g = h2d(dtObject.g);
+    dtObject.b = h2d(dtObject.b);
 
     if (typeof (dtObject.routeOpacity) != null) {
-        $("#routeOpacity").slider("value", 55);
+        $("#routeOpacity").slider("value", dtObject.routeOpacity);
+        //dtObject.routeOpacity = 55;
     }
-    else
-        $("#routeOpacity").slider("value", 55);
-
-    var tbWayPoint1 = document.getElementById("wayPoint1");
-    var tbWayPoint2 = document.getElementById("wayPoint2");
-    var tbRouteColor = document.getElementById("routeColor");
-    var tbRouteOpacity = document.getElementById("routeOpacity");
-
-    tbWayPoint1.innerText = dtObject.wayPoint1;
-    tbWayPoint2.innerText = dtObject.wayPoint2;
-    tbRouteColor.value = dtObject.routeColor;
-    //tbRouteOpacity.innerText = dtObject.routeOpacity;
-
-    if (typeof(dtObject.wayPoint1) == undefined)
-    {
-        dtObject.wayPoint1 = "2668 Town Lake Dr, Woodbury, MN, 55125";
+    else {
+        $("#routeOpacity").slider("value", dtObject.routeOpacity);
+        //dtObject.routeOpacity = 55; 
     }
+    dtObject.a = parseInt(dtObject.routeOpacity);
+
+    var t1 = dtObject.wayPoint1;
+    var t2 = dtObject.wayPoint2;
+    var t3 = dtObject.routeColor;
+
+
+    $("#wayPoint1").val(t1);
+    $("#wayPoint2").val(t2);
+    $("#routeColor").val(t3);
+    
+
+   // if (typeof(dtObject.wayPoint1) == undefined)
+   // {
+   //     dtObject.wayPoint1 = "2668 Town Lake Dr, Woodbury, MN, 55125";
+   // }
 }
 
 function saveSettings() {
 
     
 
-    var tbWayPoint1 = document.getElementById("wayPoint1");
-    var tbWayPoint2 = document.getElementById("wayPoint2");
-    var tbRouteColor = document.getElementById("routeColor");
-    var tbRouteOpacity = document.getElementById("routeOpacity");
-
-    var txtWP1 = tbWayPoint1.value;
-    var txtWP2 = tbWayPoint2.value;
-    var txtRC = tbRouteColor.value;
-    var txtRO = tbRouteOpacity.value;
+    var txtWP1 = $("#wayPoint1").val();
+    var txtWP2 = $("#wayPoint2").val();
+    var txtRC  = $("#routeColor").val();
+    var txtRO  = $("#routeOpacity").slider( "option", "value" );
 
     var i = 0;
 
@@ -77,6 +90,15 @@ function saveSettings() {
     dtObject.wayPoint2 = $.cookie("wayPoint2");
     dtObject.routeColor = $.cookie("routeColor");
     dtObject.routeOpacity = $.cookie("routeOpacity");
+
+    dtObject.r = dtObject.routeColor.substr(1,2);
+    dtObject.g = dtObject.routeColor.substr(3,2);
+    dtObject.b = dtObject.routeColor.substr(5,2);
+
+    dtObject.r = h2d(dtObject.r);
+    dtObject.g = h2d(dtObject.g);
+    dtObject.b = h2d(dtObject.b);
+    dtObject.a = parseInt(dtObject.routeOpacity);
 
 }
 

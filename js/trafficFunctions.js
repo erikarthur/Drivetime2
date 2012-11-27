@@ -18,10 +18,10 @@ function createDrivingRoute(iDirection) {
     var options = directionsManager.getRenderOptions();
     options.drivingPolylineOptions.visible = false;
     //ff0088
-    options.drivingPolylineOptions.strokeColor.a = 255;
-    options.drivingPolylineOptions.strokeColor.r = 255;
-    options.drivingPolylineOptions.strokeColor.g = 0;
-    options.drivingPolylineOptions.strokeColor.b = 136;
+    options.drivingPolylineOptions.strokeColor.a = dtObject.a;
+    options.drivingPolylineOptions.strokeColor.r = dtObject.r;
+    options.drivingPolylineOptions.strokeColor.g = dtObject.g;
+    options.drivingPolylineOptions.strokeColor.b = dtObject.b;
     directionsManager.setRenderOptions(options);
     options = directionsManager.getRenderOptions();
     
