@@ -12,22 +12,12 @@ dtObject.routeOpacity = null;
 
 function initializeObjects()
 {
-    //initialize the cookies for testing
-    //$.cookie("wayPoint1", "2668 Town Lake Dr Woodbury MN 55125", { expires: 365 });
-    //$.cookie("wayPoint2", "30 E. 7th St, St Paul, MN 55101", { expires: 365 });
-    //$.cookie("routeColor", "ff0088", { expires: 365 });
-    //$.cookie("routeOpacity", "255", { expires: 365 });
-
-    //dtObject.wayPoint1 = "2668 Town Lake Dr Woodbury MN 55125";
-    //dtObject.wayPoint2 =  "30 E. 7th St, St Paul, MN 55101";
-    //dtObject.routeColor = "#ff0088";
-    //dtObject.routeOpacity =  255;
 
     //read the dtObjects values from a cookie
-    dtObject.wayPoint1 = $.cookie("wayPoint1");
-    dtObject.wayPoint2 = $.cookie("wayPoint2");
-    dtObject.routeColor = $.cookie("routeColor");
-    dtObject.routeOpacity = $.cookie("routeOpacity");
+    dtObject.wayPoint1 = localStorage.getItem("wayPoint1");
+    dtObject.wayPoint2 = localStorage.getItem("wayPoint2");
+    dtObject.routeColor = localStorage.getItem("routeColor");
+    dtObject.routeOpacity = localStorage.getItem("routeOpacity");
 
     if (typeof (dtObject.routeOpacity) != null) {
         $("#routeOpacity").slider("value", 55);
@@ -40,10 +30,17 @@ function initializeObjects()
     var tbRouteColor = document.getElementById("routeColor");
     var tbRouteOpacity = document.getElementById("routeOpacity");
 
-    tbWayPoint1.innerText = dtObject.wayPoint1;
-    tbWayPoint2.innerText = dtObject.wayPoint2;
-    tbRouteColor.value = dtObject.routeColor;
-    //tbRouteOpacity.innerText = dtObject.routeOpacity;
+    if (typeof(dtObject.wayPoint1)=="undefined")
+        tbWayPoint1.innerText = dtObject.wayPoint1;
+
+    if (typeof(dtObject.wayPoint2)=="undefined")
+        tbWayPoint2.innerText = dtObject.wayPoint2;
+
+    if (typeof(dtObject.routeColor)=="undefined")
+        tbRouteColor.value = dtObject.routeColor;
+
+    if (typeof(dtObject.routeOpacity)=="undefined")
+        tbRouteOpacity.innerText = dtObject.routeOpacity;
 
     if (typeof(dtObject.wayPoint1) == undefined)
     {
@@ -65,18 +62,16 @@ function saveSettings() {
     var txtRC = tbRouteColor.value;
     var txtRO = tbRouteOpacity.value;
 
-    var i = 0;
-
-    $.cookie("wayPoint1", txtWP1, { expires: 365 });
-    $.cookie("wayPoint2", txtWP2, { expires: 365 });
-    $.cookie("routeColor", txtRC, { expires: 365 });
-    $.cookie("routeOpacity", txtRO, { expires: 365 });
+    localStorage.setItem("wayPoint1", txtWP1);
+    localStorage.setItem("wayPoint2", txtWP2);
+    localStorage.setItem("routeColor", txtRC);
+    localStorage.setItem("routeOpacity", txtRO);
 
     //read the dtObjects values from a cookie
-    dtObject.wayPoint1 = $.cookie("wayPoint1");
-    dtObject.wayPoint2 = $.cookie("wayPoint2");
-    dtObject.routeColor = $.cookie("routeColor");
-    dtObject.routeOpacity = $.cookie("routeOpacity");
+    dtObject.wayPoint1 = localStorage.getItem("wayPoint1");
+    dtObject.wayPoint2 = localStorage.getItem("wayPoint2");
+    dtObject.routeColor = localStorage.getItem("routeColor");
+    dtObject.routeOpacity = localStorage.getItem("routeOpacity");
 
 }
 
@@ -120,7 +115,7 @@ function createMap() {
     if (hours == 0) {
         hours = 12;
     }
-    var UpdateTimeDisplay = document.getElementById("updateTime")
+    var UpdateTimeDisplay = document.getElementById("updateTime");
     var minutes = currentTime.getMinutes();
     if (minutes < 10) {
         UpdateTimeDisplay.innerHTML = "Last Updated: " + hours + ":0" + minutes;
