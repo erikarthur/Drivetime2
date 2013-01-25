@@ -80,7 +80,7 @@ function createMap() {
     initializeObjects();
     // Initialize the map
     map = new Microsoft.Maps.Map(document.getElementById("myMap"),
-                 { credentials: "AmLVAXMn2L1eVoiJ-v4jC9Sxyoh1A-DAViCGgQZT7xsGjZGJJMEo2p1sEIy2G_95" });
+                 { credentials: "Aq046iezWfpJSRPoDpS4LI8oEDuUtFYpUX_UnNq0tdnMUy77SQuvF-6TdeSLSyax" });
 
     var latVal = 44.93829887705892;
     var longVal = -93.0003124149414;
